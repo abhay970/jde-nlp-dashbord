@@ -15,7 +15,7 @@ DATA_SOURCE_NAME = "JDE.TESTDTA"
 cnx = st.connection("snowflake")
 session = cnx.session()
 # Initialize session once and reuse
-@st.cache_resource
+# @st.cache_resource
 # def get_snowpark_session():
 #     """Get and cache the Snowpark session to avoid recreation"""
 #     return get_active_session()
