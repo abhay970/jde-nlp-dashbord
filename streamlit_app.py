@@ -274,16 +274,46 @@ def execute_data_procedure(query: str) -> Tuple[Optional[pd.DataFrame], Optional
 def has_data_errors(df: pd.DataFrame) -> bool:
     """Check if DataFrame contains error indicators."""
     # Check for error columns
-    if "error" in df.columns:
-        error_rows = df[df["error"].notna()]
+    if "ERROR" in df.columns or "error" in df.columns:
+        error_col = "ERROR" if "ERROR" in df.columns else "error"
+        error_rows = df[df[error_col].notna()]
         if not error_rows.empty:
-            return True
+            # Check for specific error patterns
+            for error_val in error_rows[error_col]:
+                error_str = str(error_val).lower()
+                if any(keyword in error_str for keyword in [
+                    'unexpected data format', 
+                    'error while executing', 
+                    'no data', 
+                    'not found', 
+                    'empty',
+                    'sql error',
+                    'execution error'
+                ]):
+                    return True
+    
+    # Check for DATA column with error messages
+    if "DATA" in df.columns:
+        for data_val in df["DATA"]:
+            data_str = str(data_val).lower()
+            if any(keyword in data_str for keyword in [
+                'error while executing sql',
+                'sql error',
+                'execution failed',
+                'query failed'
+            ]):
+                return True
     
     # Check for message-only results indicating no data
     if len(df.columns) == 1 and "message" in df.columns:
         message = str(df["message"].iloc[0]).lower()
         if any(keyword in message for keyword in ['no data', 'not found', 'empty', 'error']):
             return True
+    
+    # Check if DataFrame only contains error-related columns
+    error_related_cols = ['ERROR', 'error', 'RECEIVED_TYPE', 'DATA']
+    if all(col in error_related_cols for col in df.columns):
+        return True
     
     return False
 
