@@ -327,7 +327,7 @@ def execute_and_display_results(sql: str, message_index: int, confidence: dict):
         display_confidence_info(confidence, message_index)
 
     # Execute and display results
-    st.markdown("**📊 Query Results**")
+    # st.markdown("**📊 Query Results**")
     
     with st.spinner(f"⚡ Fetching data from {DATA_SOURCE_NAME}..."):
         df, error_msg = execute_data_procedure(sql)
