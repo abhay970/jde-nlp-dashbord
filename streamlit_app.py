@@ -905,8 +905,8 @@ if 'tables_created_successfully' not in st.session_state:
 
 try:
     # Initialize Snowflake session
-    session = get_active_session()
-    st.success("✅ Connected to Snowflake successfully!")
+    # session = get_active_session()
+    # st.success("✅ Connected to Snowflake successfully!")
     
     # Display content based on selected mode
     if st.session_state.show_table_manager:
