@@ -1,6 +1,6 @@
 # Import packages
 import streamlit as st
-from snowflake.snowpark.context import get_active_session
+# from snowflake.snowpark.context import get_active_session
 from snowflake.snowpark.exceptions import SnowparkSQLException
 import pandas as pd
 import re
@@ -21,7 +21,8 @@ st.set_page_config(
 # Initialize session state
 if 'show_table_manager' not in st.session_state:
     st.session_state.show_table_manager = False
-
+cnx = st.connection("snowflake")
+session = cnx.session()
 # Constants
 JDE_STAGE = "JDE.TESTDTA.JDE_STAGE"
 YAML_CONFIG = "JDE.TESTDTA.jde_stage/jde.yaml"
